@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<!-- BODY-->
+    <body> 
+        <style>
+        body{
+            background-color: #000;
+        }
+        .footer{
+            margin: auto;
+            position: absolute;
+            text-align: center;
+            color: #3acdac;
+
+        }
+        #myCanvas{
+            background-color: #3acdac;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 3%;
+        }
+        </style>
+        <body>
+            <canvas id="myCanvas"></canvas>
+        </body>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+        <script>
+            myCanvas.width = 600;
+            myCanvas.height = 500;
+            var yellow = "#e2f005";
+            var green = "#1f9c0c";
+            var blue ="#060af0";
+            var red = "#ba0b0b";
+            var colors = [yellow,green,blue,red];
+            var i =parseInt(Math.random()*4);
+            var dummy =0;
+            factor = 1;
+            var start = 0;
+            var end = 1.5*Math.PI/30;
+            var canvas = document.getElementById("myCanvas");
+            var ctx = canvas.getContext("2d");
+            var rotation = 0;
+            var score = 0;
+            var idleTime = 0;
+
+        requestAnimationFrame(clock);
+        function clock () {
+            
+            requestAnimationFrame(clock);
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                ctx.beginPath();
+
+            ctx.arc(myCanvas.width/2, myCanvas.height/2, 200, 0, 1/2*Math.PI, false);
+            ctx.arc(myCanvas.width/2, myCanvas.height/2, 150, 1/2*Math.PI, 0, true);
+            ctx.fillStyle =colors[0];
+            ctx.fill();
+            ctx.closePath();
+            ctx.restore();
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(myCanvas.width/2, myCanvas.height/2, 200, 1/2*Math.PI, 1*Math.PI, false);
+            ctx.arc(myCanvas.width/2, myCanvas.height/2, 150, 1*Math.PI, 1/2*Math.PI, true);
+            ctx.fillStyle = colors[1];
+            ctx.fill();
+            ctx.closePath();
+            ctx.restore();
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(myCanvas.width/2, myCanvas.height/2, 200, 1*Math.PI, 3/2*Math.PI, false);
+            ctx.arc(myCanvas.width/2, myCanvas.height/2, 150, 3/2*Math.PI, 1*Math.PI, true);
+            ctx.fillStyle = colors[2];
+            ctx.fill();
+            ctx.closePath();
+            ctx.restore();
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(myCanvas.width/2, myCanvas.height/2, 200, 3/2*Math.PI, 2*Math.PI, false);
+            ctx.arc(myCanvas.width/2, myCanvas.height/2, 150, 2*Math.PI, 3/2*Math.PI, true);
+            ctx.fillStyle = colors[3];
+            ctx.fill();
+            ctx.closePath();
+            ctx.restore();
+            dummy =rotation;
+            ctx.save();
+            ctx.translate(myCanvas.width/2, myCanvas.height/2);
+            ctx.rotate(rotation);
+            ctx.beginPath();
+            ctx.arc(0,0, 120,start, end,false);
+            ctx.arc(0,0, 0, end,start,true);
+            ctx.arc(0,0, 20,0, 2*Math.PI);
+            ctx.fillStyle = colors[i];
+            ctx.fill();
+           // ctx.closePath();
+            ctx.restore();
+            rotation+=factor*(Math.PI/35);
+            if (rotation>2*Math.PI) {
+                rotation=0;
+            };
+            if (rotation<0) {
+                        rotation= rotation+2*Math.PI;
+                    };
+
+            }
+
+            window.addEventListener( "keyup",function(e) {
+
+                    var code = e.keyCode;
+                    var angle =dummy;
+                   
+                    if (code==32 || code ==13) {
+                       // window.alert(rotation);
+                        if (angle>=0 && angle<=Math.PI/2 && i==0) {
+                            factor*=-1;
+                            i =parseInt(Math.random()*4);
+                            score++;
+                        }
+                        else if (angle>Math.PI/2 &&
+                         angle<=Math.PI && i==1) {
+                            factor*=-1;
+                            i =parseInt(Math.random()*4);
+                            score++;
+                        }
+                        else if (angle>Math.PI && angle<=3/2*Math.PI && i==2) {
+                            factor*=-1;
+                            i =parseInt(Math.random()*4);
+                            score++;
+                        }
+                        else if (angle>3*Math.PI/2 && angle<=2*Math.PI && i==3) {
+                            factor*=-1;
+                            i =parseInt(Math.random()*4);
+                            score++;
+                        }
+                        else{
+                            window.alert(score);
+                            score=0;
+                        }
+                        factor*=1;
+                    }
+                });
+
+                $(document).ready(function () {
+                    //Increment the idle time counter every minute.
+                    var idleInterval = setInterval(timerIncrement, 380);
+
+                    //Zero the idle timer on mouse movement.
+                    $(this).mousemove(function (e) {
+                        idleTime = 0;
+                    });
+                    $(this).keypress(function (e) {
+                        idleTime = 0;
+                    });
+                });
+
+                function timerIncrement() {
+                    idleTime = idleTime + 1;
+                    if (idleTime>5) { 
+                        window.alert(score);
+                        score=0;
+                        idleTime=0;
+                    }
+                }
+
+        </script>
+          </body>
+
+</html>
