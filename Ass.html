@@ -20,8 +20,14 @@
             margin-right: auto;
             margin-top: 3%;
         }
+        #demo{
+            color: #20479b;
+            position: absolute;
+            text-align: left;
+        }
         </style>
         <body>
+            <div id = "demo"></div>
             <canvas id="myCanvas"></canvas>
         </body>
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -42,8 +48,10 @@
             var canvas = document.getElementById("myCanvas");
             var ctx = canvas.getContext("2d");
             var rotation = 0;
+            var Rot = 0;
             var score = 0;
             var idleTime = 0;
+            var res = '';
 
         requestAnimationFrame(clock);
         function clock () {
@@ -107,12 +115,44 @@
 
             }
 
+            function Norm (a) {
+                if (a<0) {
+                    return 2*Math.PI+a;
+                } else{
+                    return a;
+                };
+            }
+
+            function time (i , rot, fac){
+                var dis = 0;
+                if (fac<0){
+
+                    if ( ( rot - i / 2 * Math.PI ) < Math.PI / 2 ) {
+                        dis = ( 2 * Math.PI + ( rot - i / 2 * Math.PI ) ) ;
+               
+                    } else{
+                        dis = ( Norm ( rot - i / 2 * Math.PI ) );
+           
+                    }
+                }
+                else{ 
+                    if ( ( ( i + 1 ) / 2 * Math.PI - rot ) < Math.PI / 2 ) {
+                        dis = ( 2 * Math.PI + ( ( i + 1 ) / 2 * Math.PI - rot ) );
+
+                    } else{
+                        dis = ( Norm ( ( i + 1 ) / 2 * Math.PI - rot ) ) ;
+                    }
+                }
+                return (dis/Math.PI);
+            }
+
             window.addEventListener( "keyup",function(e) {
 
                     var code = e.keyCode;
                     var angle =dummy;
                    
                     if (code==32 || code ==13) {
+                         Rot = rotation;
                        // window.alert(rotation);
                         if (angle>=0 && angle<=Math.PI/2 && i==0) {
                             factor*=-1;
@@ -140,12 +180,13 @@
                             score=0;
                         }
                         factor*=1;
+                          document.getElementById("demo").innerHTML =score;
                     }
                 });
 
                 $(document).ready(function () {
                     //Increment the idle time counter every minute.
-                    var idleInterval = setInterval(timerIncrement, 380);
+                    var idleInterval = setInterval(timerIncrement, 100);
 
                     //Zero the idle timer on mouse movement.
                     $(this).mousemove(function (e) {
@@ -157,8 +198,8 @@
                 });
 
                 function timerIncrement() {
-                    idleTime = idleTime + 1;
-                    if (idleTime>5) { 
+                    idleTime = idleTime + 0.1;
+                    if (idleTime> time(i , Rot, factor)) {
                         window.alert(score);
                         score=0;
                         idleTime=0;
